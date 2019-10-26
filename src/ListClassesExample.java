@@ -11,22 +11,21 @@ import java.util.List;
 
 import javax.swing.SwingWorker;
 
-public class ListClassesExample extends SwingWorker<Void, List> {
+public class ListClassesExample {
 
-	List<String> JavaFiles = new ArrayList<String>();
+	public List<String> JavaFiles = new ArrayList<String>(); 
 	public File projectDir;
 	public UserInterface gui;
 	
 	public ListClassesExample(UserInterface gui) {
 		this.gui = gui;
 	}
+		
+
 	
-	
-//    public void listClasses(File projectDir) {
-	
-	@Override
-	protected Void doInBackground() throws Exception {
+    public void listClasses(File projectDir) {
     	
+		List<String> TestFiles = new ArrayList<String>();
         new DirExplorer((level, path, file) -> path.endsWith(".java") && (path.contains("Test") || path.contains("test")),
         		(level, path, file) -> {
         			
@@ -39,7 +38,7 @@ public class ListClassesExample extends SwingWorker<Void, List> {
                     public void visit(ClassOrInterfaceDeclaration n, Object arg) {
                         super.visit(n, arg);
                         System.out.println(" * " + n.getName());
-                        JavaFiles.add( n.getName().asString());
+                        TestFiles.add( n.getName().asString());
                     }
                 }.visit(JavaParser.parse(file), null);
                 System.out.println(); // empty line
@@ -49,23 +48,22 @@ public class ListClassesExample extends SwingWorker<Void, List> {
             }
         }).explore(projectDir);
         
-        publish(JavaFiles);
-        
-        return null;
+        setClassNameList(TestFiles);
+//        System.out.println("INNER :" + TestFiles.size());
+
     }
 	
-	@Override
-	protected void process(final List<List> chunks) {
-		// Updates the messages text area
-		
-	    for (final List fileList : chunks) {
-	    	gui.showTestFileList(fileList);
-	    }
-	}
+
 	
     
-    
-    public List<String> getClassNames(){
+    public void setClassNameList(List<String> TestFiles) {
+//    	System.out.println("uff :" + TestFiles.size() + "\n" + TestFiles);
+    	this.JavaFiles = new ArrayList<String>(TestFiles);
+//    	System.out.println("uff1 :" + JavaFiles.size() + "\n" + JavaFiles);
+    }
+	
+    public List<String> getTestClassList(){
+//    	System.out.println("OUTER :" + JavaFiles.size());
      	return JavaFiles;
      }
 

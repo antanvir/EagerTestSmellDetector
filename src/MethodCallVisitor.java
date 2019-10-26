@@ -24,7 +24,7 @@ public class MethodCallVisitor extends VoidVisitorAdapter<Void> {
         		setIsTestMethod(true);
         	}
         	
-        	if(!methodName.contains("assert") && !methodName.contains("set")) {
+        	if(!methodName.contains("assert") && !methodName.contains("set") && !methodName.contains("get")) {
         		counter++;
         		String str = " [Line " + n.getBegin().get().line +  "] " + methodName;
         		listEagerTestsInsideThisMethod.add(str);

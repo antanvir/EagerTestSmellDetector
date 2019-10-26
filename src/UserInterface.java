@@ -4,6 +4,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileSystemView;
+
+import com.google.common.base.Strings;
+
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.SwingConstants;
@@ -45,6 +48,7 @@ public class UserInterface extends JFrame {
 	private JTextField pathString;
 	JButton folderButton;
 	JTabbedPane displayPane;
+	JTextArea TestClassses;
 	
 	public static List<String> JavaFileNames = new ArrayList<String>();
 	File projectDir;
@@ -56,6 +60,7 @@ public class UserInterface extends JFrame {
 	public JPanel[] tabPanels;
 	public JTextArea[] panelTextAreas;
 	double N;
+	int NumOfTestClasses = 0;
 
 	public UserInterface() {
 		
@@ -127,21 +132,29 @@ public class UserInterface extends JFrame {
 		selectionPanel.add(startButton);
 		startButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				projectDir = new File("F:\\06\\Testing\\Gradebook-master");
 				
-//				projectDir = new File(pathString.getText());
-				ListClassesExample classeExtractor = new ListClassesExample(getInstanceOfThisClass());
-				classeExtractor.setDirectory(projectDir);
-				classeExtractor.execute();
+				extractTestClasses();
+				analyzeSmmells();
 				
-				JavaFileNames = classeExtractor.getClassNames(); 
+//				projectDir = new File("F:\\06\\Testing\\Gradebook-master");
+//				
+////				projectDir = new File(pathString.getText());
+//				ListClassesExample classeExtractor = new ListClassesExample(getInstanceOfThisClass());
+//				classeExtractor.setDirectory(projectDir);
+//				classeExtractor.execute();
 				
-				tabPanels = new JPanel[JavaFileNames.size()];
-				panelTextAreas = new JTextArea[JavaFileNames.size()];
+//				JavaFileNames = classeExtractor.getTestClassList(); 
 				
-				N = JavaFileNames.size() + 1.0;
-				progressBar.setVisible(true);
-				updateProgressBar( (int) (1 * 100.0 / N) );
+				
+//				int size = getNumOfTestClasses();
+//				System.out.println("SIZE: " + size);
+//				
+//				tabPanels = new JPanel[size];
+//				panelTextAreas = new JTextArea[size];
+//				
+//				N = size + 1.0;
+//				progressBar.setVisible(true);
+//				updateProgressBar( (int) (1 * 100.0 / N) );
 				
 				
 //				for(String item: JavaFilesPath) {
@@ -150,10 +163,10 @@ public class UserInterface extends JFrame {
 				
 //				showTestFileList();
 				
-				StatementLinesExample methodParser = new StatementLinesExample(getInstanceOfThisClass());
-//				 methodParser.setProjectDirectory(projectDir);
-				methodParser.setDirectory(projectDir);
-				methodParser.execute();
+//				StatementLinesExample methodParser = new StatementLinesExample(getInstanceOfThisClass());
+////				 methodParser.setProjectDirectory(projectDir);
+//				methodParser.setDirectory(projectDir);
+//				methodParser.execute();
 				
 			}
 		});
@@ -173,7 +186,10 @@ public class UserInterface extends JFrame {
 		
 //		list = new JList();
 //		list.setBounds(0, (int) (height/6.0), (int) (width/(8.0) + 100), (int) (height*(4/6.0)) + 30);
-		
+		TestClassses = new JTextArea();
+		TestClassses.setBounds(5, 30, (int) (width/(8.0) + 90), (int) (height*(4/6.0)) );
+		TestClassses.setVisible(true);
+		fileListPanel.add(TestClassses);
 		
 		smellDisplayPanel = new JPanel();
 		smellDisplayPanel.setBackground(new Color(255, 255, 255));
@@ -203,30 +219,83 @@ public class UserInterface extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				pathString.setText("");
 				displayPane.removeAll();
-				classNameList = null;
+				TestClassses.setVisible(false);
 				FileNameLabel.setVisible(false);
-				progressBar.setValue(0);
+				progressBar.setVisible(false);
 			}
 		});
 	}
 	
-	public void showTestFileList(List<String> JavaFileNames){
-		FileNameLabel.setVisible(true);
+	
+	
+	
+	public void extractTestClasses() {
+		projectDir = new File("F:\\06\\Testing\\Gradebook-master");
 		
-		classNameList = new JList(JavaFileNames.toArray());
-		classNameList.setBounds(5, 30, (int) (width/(8.0) + 90), (int) (height*(4/6.0)) );
-		classNameList.setSelectedIndex(-1);
-		classNameList.setVisibleRowCount(-1);
-		fileListPanel.add(classNameList);
+//		projectDir = new File(pathString.getText());
+		ListClassesExample classeExtractor = new ListClassesExample(getInstanceOfThisClass());
+		classeExtractor.setDirectory(projectDir);
+//		classeExtractor.execute();
+		classeExtractor.listClasses(projectDir);
+		this.JavaFileNames.addAll( classeExtractor.getTestClassList() );
+		this.NumOfTestClasses = this.JavaFileNames.size();
+		
+		showTestFileList(this.JavaFileNames);
+		initializeNecessaryVaribles();
+		
+	}
+	
+	
+	public void analyzeSmmells(){
+		StatementLinesExample methodParser = new StatementLinesExample(getInstanceOfThisClass());
+//		 methodParser.setProjectDirectory(projectDir);
+		methodParser.setDirectory(projectDir);
+		methodParser.execute();
+	}
+	
+	
+//	public void setClassNameList(List<String> JavaFileNames) {
+//
+//		this.JavaFileNames.addAll(JavaFileNames);
+//		NumOfTestClasses = this.JavaFileNames.size();
+//		
+////		System.out.println("dhuro :" + this.JavaFileNames.size() + "\n" + this.JavaFileNames);
+//		
+//		initializeNecessaryVaribles();
+//		
+//	}
+	
+	public void initializeNecessaryVaribles() {
+		int size = getNumOfTestClasses();
+//		System.out.println("SIZE: " + size);
+		
+		tabPanels = new JPanel[size];
+		panelTextAreas = new JTextArea[size];
+		
+		progressBar.setVisible(true);
+		N = size + 1.0;
+		updateProgressBar( (int) (1 * 100.0 / N) );
+	}
+	
+	
+	public int getNumOfTestClasses() {
+		return NumOfTestClasses;
+	}
+	
+	public void showTestFileList(List<String> JavaFileNames){
+		
+//		setClassNameList(JavaFileNames);
+		
+		FileNameLabel.setVisible(true);		
+		String text = "";
+		for(String name: JavaFileNames) {
+			text += "\n  " + name;
+		}
+		TestClassses.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		TestClassses.setText(text);
 
 	}
 	
-	public void displaySmells(String smellyMethod) {
-		String str = panelTextAreas[index].getText();
-		str += "\n" + smellyMethod;
-		panelTextAreas[index].setText("");
-		panelTextAreas[index].setText(str);
-	}
 	
 	public void setInstanceOfThisClass(UserInterface gui) {
 		GuiInstance = gui;
@@ -248,19 +317,36 @@ public class UserInterface extends JFrame {
 	
 	public void addTabPane() {
 		if(prevIndex != index) {
+			System.out.println("Tab setting index: " + index);
 			tabPanels[index] = new JPanel();
-			panelTextAreas[index] = new JTextArea(300, 200);
+			panelTextAreas[index] = new JTextArea(200, 100);
+			
+			panelTextAreas[index].setText("\t *** EAGER TEST SMELL LOG *** \n");
+			String str = Strings.repeat("=", panelTextAreas[index].getText().length() * 2);
+			panelTextAreas[index].setText( panelTextAreas[index].getText() + str + "\n");
 			
 			tabPanels[index].add(panelTextAreas[index]);
-			displayPane.addTab(JavaFileNames.get(index), tabPanels[index]);
+			displayPane.addTab( JavaFileNames.get(index), new JScrollPane(tabPanels[index]) );
+			
 			updateProgressBar( (int) ((index + 2) * 100.0 / N) );
 		}
 	}
 	
+	public void displaySmells(String smellyMethod) {
+		System.out.println("index: " + index);
+		String str = panelTextAreas[index].getText();
+//		System.out.println("Tab 0: " + panelTextAreas[0].getText());
+		
+		str += "\n" + smellyMethod;
+		panelTextAreas[index].setText("");
+		panelTextAreas[index].setText(str);
+	}
+	
 	public void updateProgressBar(int n) {
+		System.out.println(n);
 		try {
 			progressBar.setValue(n);
-			Thread.sleep(1000);
+			Thread.sleep(200);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
