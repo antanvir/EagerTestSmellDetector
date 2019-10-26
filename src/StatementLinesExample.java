@@ -47,23 +47,26 @@ public class StatementLinesExample extends SwingWorker<Void, String> {
                             if(visitor.isTestMethod() && visitor.getCounter() >=2 ) {
                             	smellFound = true;
                             	
-                            	String str = " [Lines " + node.getBegin().get().line +" - "+ node.getEnd().get().line + " ]\n ";
-                            	str += node + "\n";
+//                            	String str = " [Lines " + node.getBegin().get().line +" - "+ node.getEnd().get().line + " ]\n ";
+//                            	str += node + "\n";
                             	
 //                            	System.out.println(" [Lines " + node.getBegin().get().line +" - "+ node.getEnd().get().line + " ]\n " + node);
 //                            	System.out.println();                       
                             	
                             	List<String> listOfEagerTests = visitor.getEagerTestSmellsInsideMethod();
                             	
-                            	System.out.println(Strings.repeat("-", 35));
+//                            	System.out.println(Strings.repeat("-", 35));
+                            	String str = "\n";
                             	for(String s: listOfEagerTests) {
                             		System.out.println(s);
+                            		str += s + "\n";
                             	}
                             	
                             	publish(Integer.toString( counter) );
             					publish(str);
                             }
-                            System.out.println("\n");
+                            
+//                            System.out.println("\n");
                             return false;
                         } else {
                             return true;
@@ -75,7 +78,7 @@ public class StatementLinesExample extends SwingWorker<Void, String> {
                 System.out.println("path: " + path + "\t smellFound Value: " + smellFound + " index counter: " + counter);
                 if(!smellFound) {
                 	System.out.println("HERE HERE");
-                	String str = "No 'Eager Test Smell' found in this class.";
+                	String str = "\tNo 'Eager Test Smell' found in this class.";
                 	publish(Integer.toString( counter) );
                 	publish(str);
                 }
@@ -92,15 +95,6 @@ public class StatementLinesExample extends SwingWorker<Void, String> {
                 new RuntimeException(e);
             }
             
-//            if(!smellFound) {
-//            	
-//            	publish(Integer.toString( counter) );
-//            	String str = "\tNo 'Eager Test Smell' found in this class. Good\n\tWell done!";
-//            	publish(str);
-//            }
-//            
-//            counter++;
-//            smellFound = false;
         }).explore(projectDir);
                        
         return null;
@@ -119,11 +113,7 @@ public class StatementLinesExample extends SwingWorker<Void, String> {
 	    	else {
 	    		gui.displaySmells(info);
 	    	}
-//	    	try {
-//    			Thread.sleep(200);
-//    		} catch (Exception e) {
-//    			// TODO: handle exception
-//    		}
+
 	    }
 	}
 	

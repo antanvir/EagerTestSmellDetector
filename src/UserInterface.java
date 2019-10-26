@@ -56,7 +56,7 @@ public class UserInterface extends JFrame {
 	
 	double width, height;
 	public UserInterface GuiInstance;
-	public int index, prevIndex = -1;
+	public int index = -1, prevIndex = -1;
 	public JPanel[] tabPanels;
 	public JTextArea[] panelTextAreas;
 	double N;
@@ -132,41 +132,11 @@ public class UserInterface extends JFrame {
 		selectionPanel.add(startButton);
 		startButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+//				prevIndex = -1;
+				System.out.println("Hello prevInd : " + prevIndex);
 				extractTestClasses();
 				analyzeSmmells();
 				
-//				projectDir = new File("F:\\06\\Testing\\Gradebook-master");
-//				
-////				projectDir = new File(pathString.getText());
-//				ListClassesExample classeExtractor = new ListClassesExample(getInstanceOfThisClass());
-//				classeExtractor.setDirectory(projectDir);
-//				classeExtractor.execute();
-				
-//				JavaFileNames = classeExtractor.getTestClassList(); 
-				
-				
-//				int size = getNumOfTestClasses();
-//				System.out.println("SIZE: " + size);
-//				
-//				tabPanels = new JPanel[size];
-//				panelTextAreas = new JTextArea[size];
-//				
-//				N = size + 1.0;
-//				progressBar.setVisible(true);
-//				updateProgressBar( (int) (1 * 100.0 / N) );
-				
-				
-//				for(String item: JavaFilesPath) {
-//					System.out.println(item);
-//				}
-				
-//				showTestFileList();
-				
-//				StatementLinesExample methodParser = new StatementLinesExample(getInstanceOfThisClass());
-////				 methodParser.setProjectDirectory(projectDir);
-//				methodParser.setDirectory(projectDir);
-//				methodParser.execute();
 				
 			}
 		});
@@ -252,18 +222,8 @@ public class UserInterface extends JFrame {
 		methodParser.setDirectory(projectDir);
 		methodParser.execute();
 	}
-	
-	
-//	public void setClassNameList(List<String> JavaFileNames) {
-//
-//		this.JavaFileNames.addAll(JavaFileNames);
-//		NumOfTestClasses = this.JavaFileNames.size();
-//		
-////		System.out.println("dhuro :" + this.JavaFileNames.size() + "\n" + this.JavaFileNames);
-//		
-//		initializeNecessaryVaribles();
-//		
-//	}
+		
+
 	
 	public void initializeNecessaryVaribles() {
 		int size = getNumOfTestClasses();
@@ -316,8 +276,9 @@ public class UserInterface extends JFrame {
 	}
 	
 	public void addTabPane() {
+
 		if(prevIndex != index) {
-			System.out.println("Tab setting index: " + index);
+
 			tabPanels[index] = new JPanel();
 			panelTextAreas[index] = new JTextArea(200, 100);
 			
@@ -335,7 +296,6 @@ public class UserInterface extends JFrame {
 	public void displaySmells(String smellyMethod) {
 		System.out.println("index: " + index);
 		String str = panelTextAreas[index].getText();
-//		System.out.println("Tab 0: " + panelTextAreas[0].getText());
 		
 		str += "\n" + smellyMethod;
 		panelTextAreas[index].setText("");
