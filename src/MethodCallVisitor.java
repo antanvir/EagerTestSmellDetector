@@ -14,9 +14,7 @@ public class MethodCallVisitor extends VoidVisitorAdapter<Void> {
 		
         @Override
         public void visit(MethodCallExpr n, Void arg) {
-        	// Don't forget to call super, it may find more method calls inside the arguments of this method call, for example.
-        	super.visit(n, arg);
-//        	System.out.println(" [Line " + n.getBegin().get().line +  "] " + n);       	
+        	super.visit(n, arg);      	
         	
         	
         	String methodName = n.getNameAsString();
@@ -24,9 +22,10 @@ public class MethodCallVisitor extends VoidVisitorAdapter<Void> {
         		setIsTestMethod(true);
         	}
         	
-        	if(!methodName.contains("assert") && !methodName.contains("set") && !methodName.contains("get")) {
+//        	if(!methodName.contains("assert") && !methodName.contains("set") && !methodName.contains("get")) {
+        	if(!methodName.contains("assert") && !methodName.contains("set") ) {
         		counter++;
-        		String str = " [Line " + n.getBegin().get().line +  "] " + methodName;
+        		String str = " [Line " + n.getBegin().get().line +  "] " + n;
         		listEagerTestsInsideThisMethod.add(str);
         	}      	
         }

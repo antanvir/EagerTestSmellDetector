@@ -9,6 +9,7 @@ import com.google.common.base.Strings;
 
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
@@ -67,11 +68,9 @@ public class UserInterface extends JFrame {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		width = screenSize.getWidth() - 10;
 		height = screenSize.getHeight() - 15;
-//		System.out.println(width + " " + (int) (height*(1/6.0)));
 		
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		setBounds(100, 100, 654, 520);
 		setBounds(5, 0, (int)width, (int)height);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -79,8 +78,6 @@ public class UserInterface extends JFrame {
 		contentPane.setLayout(null);
 		
 		selectionPanel = new JPanel();
-//		selectionPanel.setBackground(SystemColor.textHighlight);
-//		selectionPanel.setBounds(0, 0, 638, 97);
 		selectionPanel.setBounds( 0, 0, (int) width, (int) (height*(1/6.0)) );
 		contentPane.add(selectionPanel);
 		selectionPanel.setLayout(null);
@@ -90,14 +87,12 @@ public class UserInterface extends JFrame {
 		smellDetectorLabel.setBackground(new Color(240, 240, 240));
 		smellDetectorLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
 		smellDetectorLabel.setHorizontalAlignment(SwingConstants.CENTER);
-//		smellDetectorLabel.setBounds(199, 0, 228, 28);
 		smellDetectorLabel.setBounds((int) (width/2.0 - width/4.0), 5, (int) (width/2.0), 40);
 		selectionPanel.add(smellDetectorLabel);
 		
 		
 		folderButton = new JButton("Directory");
 		folderButton.setBackground(SystemColor.activeCaption);
-//		startButton.setBounds(528, 39, 89, 28);
 		folderButton.setBounds(20, 45, 100, 30);
 		selectionPanel.add(folderButton);
 		folderButton.addActionListener(new ActionListener() {
@@ -119,25 +114,29 @@ public class UserInterface extends JFrame {
 		
 		
 		progressBar = new JProgressBar();
-//		progressBar.setBounds(20, 78, 597, 14);
 		progressBar.setBounds((int) (width/(8.0) -30), 95, (int) (width*(3/4.0) + 20), 15);
 		selectionPanel.add(progressBar);
 		progressBar.setValue(0);
 		progressBar.setVisible(false);
+		progressBar.setForeground(Color.GREEN);
 		
 		JButton startButton = new JButton("Analyze");
 		startButton.setBackground(new Color(154, 205, 50));
-//		startButton.setBounds(528, 39, 89, 28);
 		startButton.setBounds((int) (width*(3/4.0) + 30), 45, (int) (width/4.0 - 60), 30);
 		selectionPanel.add(startButton);
 		startButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-//				prevIndex = -1;
-				System.out.println("Hello prevInd : " + prevIndex);
-				extractTestClasses();
-				analyzeSmmells();
+//				System.out.println("Hello prevInd : " + prevIndex);
+				if(pathString.getText() != null) {
+					
+					extractTestClasses();
+					analyzeSmmells();
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "Select Source Folder");
+				}
 				
-				
+
 			}
 		});
 		
@@ -154,16 +153,20 @@ public class UserInterface extends JFrame {
 		fileListPanel.add(FileNameLabel);
 		FileNameLabel.setVisible(false);
 		
-//		list = new JList();
-//		list.setBounds(0, (int) (height/6.0), (int) (width/(8.0) + 100), (int) (height*(4/6.0)) + 30);
+
 		TestClassses = new JTextArea();
 		TestClassses.setBounds(5, 30, (int) (width/(8.0) + 90), (int) (height*(4/6.0)) );
 		TestClassses.setVisible(true);
-		fileListPanel.add(TestClassses);
+//		fileListPanel.add(TestClassses);
+		TestClassses.setEditable(false);
+		JScrollPane scroll = new JScrollPane(TestClassses);
+		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scroll.setBounds(5, 30, (int) (width/(8.0) + 90), (int) (height*(4/6.0)));
+		fileListPanel.add(scroll);
 		
 		smellDisplayPanel = new JPanel();
 		smellDisplayPanel.setBackground(new Color(255, 255, 255));
-//		smellDisplayPanel.setBounds(215, 96, 423, 351);
 		smellDisplayPanel.setBounds((int) (width/(8.0) + 120), (int) (height/6.0), (int) (width*(7/8.0) - 150), (int) (height*(4/6.0) + 30) );
 		contentPane.add(smellDisplayPanel);
 		smellDisplayPanel.setLayout(null);
@@ -171,10 +174,10 @@ public class UserInterface extends JFrame {
 		displayPane = new JTabbedPane();
 		displayPane.setBounds(0, 0, (int) (width*(7/8.0) - 150), (int) (height*(4/6.0) + 30) );
 		smellDisplayPanel.add(displayPane);
+		displayPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		
 		refreshButtonPanel = new JPanel();
 		refreshButtonPanel.setBackground(SystemColor.control);
-//		refreshButtonPanel.setBounds(0, 447, 638, 34);
 		refreshButtonPanel.setBounds(0, (int) (height*(5/6.0) + 30), (int) width, (int) (height/6.0 - 50) );
 		contentPane.add(refreshButtonPanel);
 		refreshButtonPanel.setLayout(null);
@@ -182,7 +185,6 @@ public class UserInterface extends JFrame {
 		JButton refreshButton = new JButton("Refresh");
 		refreshButton.setForeground(new Color(0, 0, 0));
 		refreshButton.setBackground(new Color(222, 184, 135));
-//		refreshButton.setBounds(533, 0, 84, 34);
 		refreshButton.setBounds((int) (width*(3/4.0) + 30), 10, (int) (width/4.0 - 60), 30);
 		refreshButtonPanel.add(refreshButton);
 		refreshButton.addActionListener(new ActionListener() {
@@ -192,6 +194,12 @@ public class UserInterface extends JFrame {
 				TestClassses.setVisible(false);
 				FileNameLabel.setVisible(false);
 				progressBar.setVisible(false);
+				projectDir = null;
+				JavaFileNames = new ArrayList<String>();
+				
+				index = -1; prevIndex = -1;
+				NumOfTestClasses = 0;
+				N = 0;
 			}
 		});
 	}
@@ -200,16 +208,16 @@ public class UserInterface extends JFrame {
 	
 	
 	public void extractTestClasses() {
-		projectDir = new File("F:\\06\\Testing\\Gradebook-master");
+//		projectDir = new File("F:\\06\\Testing\\Gradebook-master");
 		
-//		projectDir = new File(pathString.getText());
-		ListClassesExample classeExtractor = new ListClassesExample(getInstanceOfThisClass());
+		projectDir = new File(pathString.getText());
+		ListTestClasses classeExtractor = new ListTestClasses(getInstanceOfThisClass());
 		classeExtractor.setDirectory(projectDir);
-//		classeExtractor.execute();
 		classeExtractor.listClasses(projectDir);
 		this.JavaFileNames.addAll( classeExtractor.getTestClassList() );
 		this.NumOfTestClasses = this.JavaFileNames.size();
 		
+		System.out.println(NumOfTestClasses);
 		showTestFileList(this.JavaFileNames);
 		initializeNecessaryVaribles();
 		
@@ -217,8 +225,7 @@ public class UserInterface extends JFrame {
 	
 	
 	public void analyzeSmmells(){
-		StatementLinesExample methodParser = new StatementLinesExample(getInstanceOfThisClass());
-//		 methodParser.setProjectDirectory(projectDir);
+		TestMethods methodParser = new TestMethods(getInstanceOfThisClass());
 		methodParser.setDirectory(projectDir);
 		methodParser.execute();
 	}
@@ -227,7 +234,6 @@ public class UserInterface extends JFrame {
 	
 	public void initializeNecessaryVaribles() {
 		int size = getNumOfTestClasses();
-//		System.out.println("SIZE: " + size);
 		
 		tabPanels = new JPanel[size];
 		panelTextAreas = new JTextArea[size];
@@ -244,9 +250,9 @@ public class UserInterface extends JFrame {
 	
 	public void showTestFileList(List<String> JavaFileNames){
 		
-//		setClassNameList(JavaFileNames);
 		
-		FileNameLabel.setVisible(true);		
+		FileNameLabel.setVisible(true);
+		TestClassses.setVisible(true);
 		String text = "";
 		for(String name: JavaFileNames) {
 			text += "\n  " + name;
@@ -282,7 +288,7 @@ public class UserInterface extends JFrame {
 			tabPanels[index] = new JPanel();
 			panelTextAreas[index] = new JTextArea(200, 100);
 			
-			panelTextAreas[index].setText("\t *** EAGER TEST SMELL LOG *** \n");
+			panelTextAreas[index].setText("\t *** EAGER TEST SMELL  LOG *** \n");
 			String str = Strings.repeat("=", panelTextAreas[index].getText().length() * 2);
 			panelTextAreas[index].setText( panelTextAreas[index].getText() + str + "\n");
 			
@@ -294,7 +300,7 @@ public class UserInterface extends JFrame {
 	}
 	
 	public void displaySmells(String smellyMethod) {
-		System.out.println("index: " + index);
+;
 		String str = panelTextAreas[index].getText();
 		
 		str += "\n" + smellyMethod;
@@ -303,12 +309,12 @@ public class UserInterface extends JFrame {
 	}
 	
 	public void updateProgressBar(int n) {
-		System.out.println(n);
+		progressBar.setValue(n);
 		try {
-			progressBar.setValue(n);
 			Thread.sleep(200);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
+
 	}
 }

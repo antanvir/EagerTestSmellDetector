@@ -13,7 +13,7 @@ import java.util.List;
 
 import javax.swing.SwingWorker;
 
-public class StatementLinesExample extends SwingWorker<Void, String> {
+public class TestMethods extends SwingWorker<Void, String> {
 	
 	public File projectDirectory = null;
 	public int counter = 0;
@@ -21,7 +21,7 @@ public class StatementLinesExample extends SwingWorker<Void, String> {
 	public UserInterface gui;
 	public boolean smellFound = false;
 	
-	public StatementLinesExample(UserInterface gui) {
+	public TestMethods(UserInterface gui) {
 		this.gui = gui;
 	}
 	
@@ -29,13 +29,13 @@ public class StatementLinesExample extends SwingWorker<Void, String> {
 	
 	@Override
 	protected Void doInBackground() throws Exception {
-        new DirExplorer((level, path, file) -> path.endsWith(".java") && (path.contains("Test") || path.contains("test")),
+        new FolderExplorer((level, path, file) -> path.endsWith(".java") && (path.contains("Test") || path.contains("test")),
         		(level, path, file) -> {
         			
             System.out.println(path);
             System.out.println(Strings.repeat("=", path.length()));
             try {
-//            	String str = "";
+
                 new NodeIterator(new NodeIterator.NodeHandler() {
                     @Override
                     public boolean handle(Node node) {
@@ -45,10 +45,7 @@ public class StatementLinesExample extends SwingWorker<Void, String> {
                             node.accept(visitor, null);
                             
                             if(visitor.isTestMethod() && visitor.getCounter() >=2 ) {
-                            	smellFound = true;
-                            	
-//                            	String str = " [Lines " + node.getBegin().get().line +" - "+ node.getEnd().get().line + " ]\n ";
-//                            	str += node + "\n";
+                            	smellFound = true;                            	
                             	
 //                            	System.out.println(" [Lines " + node.getBegin().get().line +" - "+ node.getEnd().get().line + " ]\n " + node);
 //                            	System.out.println();                       
@@ -56,9 +53,10 @@ public class StatementLinesExample extends SwingWorker<Void, String> {
                             	List<String> listOfEagerTests = visitor.getEagerTestSmellsInsideMethod();
                             	
 //                            	System.out.println(Strings.repeat("-", 35));
-                            	String str = "\n";
+                            	String str = " [ Method Body Lines: " + node.getBegin().get().line +" - "+ node.getEnd().get().line + " ]\n ";
+                            	str += Strings.repeat("-", 45) + "\n";
                             	for(String s: listOfEagerTests) {
-                            		System.out.println(s);
+//                            		System.out.println(s);
                             		str += s + "\n";
                             	}
                             	
@@ -75,7 +73,7 @@ public class StatementLinesExample extends SwingWorker<Void, String> {
                 }).explore(JavaParser.parse(file));
                 System.out.println(); // empty line
                 
-                System.out.println("path: " + path + "\t smellFound Value: " + smellFound + " index counter: " + counter);
+//                System.out.println("path: " + path + "\t smellFound Value: " + smellFound + " index counter: " + counter);
                 if(!smellFound) {
                 	System.out.println("HERE HERE");
                 	String str = "\tNo 'Eager Test Smell' found in this class.";

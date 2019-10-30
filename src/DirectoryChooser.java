@@ -13,25 +13,7 @@ public class DirectoryChooser extends JFrame {
 	private JPanel contentPane;
 	JFileChooser jfc;
 
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					DirectoryChooser frame = new DirectoryChooser();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 
-	/**
-	 * Create the frame.
-	 */
 	public DirectoryChooser() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 594, 440);
@@ -57,8 +39,7 @@ public class DirectoryChooser extends JFrame {
 		
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
 			if (jfc.getSelectedFile().isDirectory()) {
-				path = jfc.getSelectedFile().getAbsolutePath();
-//				System.out.println("[SELECTED DIRECTORY]: " + jfc.getSelectedFile());			
+				path = jfc.getSelectedFile().getAbsolutePath();		
 			}
 		}
 		

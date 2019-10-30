@@ -1,6 +1,6 @@
 import java.io.File;
 
-public class DirExplorer {
+public class FolderExplorer {
 	
     public interface FileHandler {
         void handle(int level, String path, File file);
@@ -13,7 +13,7 @@ public class DirExplorer {
     private FileHandler fileHandler;
     private Filter filter;
 
-    public DirExplorer(Filter filter, FileHandler fileHandler) {
+    public FolderExplorer(Filter filter, FileHandler fileHandler) {
     	
         this.filter = filter;
         this.fileHandler = fileHandler;
